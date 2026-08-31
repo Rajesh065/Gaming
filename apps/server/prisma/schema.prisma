@@ -1,0 +1,122 @@
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id               String       @id @default(uuid())
+  username         String       @unique
+  email            String       @unique
+  passwordHash     String
+  displayName      String
+  role             String       @default("PLAYER")
+  status           String       @default("OFFLINE")
+  gold             Int          @default(1000)
+  nexusCrystals    Int          @default(50)
+  credits          Int          @default(500)
+  level            Int          @default(1)
+  currentXp        Int          @default(0)
+  ratingElo        Int          @default(1200)
+  totalWins        Int          @default(0)
+  totalLosses      Int          @default(0)
+  clanId           String?
+  avatarJson       String       @default("{\"chassisColor\":\"#00ffcc\",\"trailColor\":\"#ff007f\",\"visorType\":\"CYBER_HEX\",\"glowIntensity\":1.5,\"particleEffect\":\"NEON_SPARKS\"}")
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  inventory        Inventory[]
+  sentMessages     Message[]    @relation("Sender")
+  clan             Clan?        @relation(fields: [clanId], references: [id])
+  matchRecords     MatchParticipant[]
+}
+
+model Item {
+  id                 String       @id @default(uuid())
+  name               String
+  description        String
+  type               String
+  rarity             String
+  icon               String
+  basePriceGold      Int          @default(100)
+  basePriceCrystals  Int          @default(10)
+  tradable           Boolean      @default(true)
+  attributesJson     String
+  requiredLevel      Int          @default(1)
+  inventory          Inventory[]
+}
+
+model Inventory {
+  id                String       @id @default(uuid())
+  userId            String
+  itemId            String
+  quantity          Int          @default(1)
+  durabilityCurrent Int          @default(100)
+  isEquipped        Boolean      @default(false)
+  equippedSlot      String?
+  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  item              Item         @relation(fields: [itemId], references: [id], onDelete: Cascade)
+}
+
+model Clan {
+  id                 String       @id @default(uuid())
+  name               String       @unique
+  tag                String       @unique
+  description        String
+  badgeEmblem        String
+  level              Int          @default(1)
+  totalXp            Int          @default(0)
+  leaderId           String
+  isRecruiting       Boolean      @default(true)
+  minRatingRequired  Int          @default(1000)
+  createdAt          DateTime     @default(now())
+  members            User[]
+}
+
+model Tournament {
+  id                 String       @id @default(uuid())
+  title              String
+  description        String
+  gameType           String
+  format             String       @default("SINGLE_ELIMINATION")
+  status             String       @default("REGISTRATION")
+  prizePoolGold      Int          @default(5000)
+  prizePoolCrystals  Int          @default(250)
+  maxParticipants    Int          @default(16)
+  bracketJson        String
+  startDate          DateTime
+  createdAt          DateTime     @default(now())
+}
+
+model MatchRecord {
+  id              String       @id @default(uuid())
+  gameType        String
+  gameMode        String
+  winnerId        String?
+  durationSeconds Int
+  createdAt       DateTime     @default(now())
+  participants    MatchParticipant[]
+}
+
+model MatchParticipant {
+  id            String       @id @default(uuid())
+  matchId       String
+  userId        String
+  score         Int          @default(0)
+  ratingDelta   Int          @default(0)
+  xpEarned      Int          @default(0)
+  match         MatchRecord  @relation(fields: [matchId], references: [id], onDelete: Cascade)
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Message {
+  id          String       @id @default(uuid())
+  senderId    String
+  senderName  String
+  channel     String       @default("GLOBAL")
+  content     String
+  createdAt   DateTime     @default(now())
+  sender      User         @relation("Sender", fields: [senderId], references: [id], onDelete: Cascade)
+}
