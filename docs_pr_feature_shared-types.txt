@@ -1,0 +1,2 @@
+Branch: feature/shared-types
+Title: feat(types): shared domain models, player state, and real-time socket contracts
