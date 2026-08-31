@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  nexusplay-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - JWT_SECRET=nexusplay-super-secure-production-key-2026
+    restart: unless-stopped
