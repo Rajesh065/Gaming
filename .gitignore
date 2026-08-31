@@ -47,9 +47,10 @@ uploads/
 prisma/*.db
 prisma/*.db-journal
 
-# Temporary / Cache
+# Temporary / Cache / Archives
 .cache
 .eslintcache
 .stylelintcache
 .temp
 .scratch
+*.zip
