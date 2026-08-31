@@ -1,0 +1,39 @@
+name: NexusPlay CI Pipeline
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install Monorepo Dependencies
+        run: npm ci
+
+      - name: Run TypeScript Type Checks
+        run: npm run build --workspaces --if-present
+
+      - name: Test Shared Game Engine
+        run: npm test --workspace=packages/game-engine --if-present
+
+      - name: Build Web Application
+        run: npm run build --workspace=apps/web
