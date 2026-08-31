@@ -1,5 +1,5 @@
 import React from 'react';
-import { Library, Play, Clock, Trophy, CloudCheck, Sparkles } from 'lucide-react';
+import { Library, Play, Clock, Trophy, CheckCircle2, Sparkles } from 'lucide-react';
 import { AudioSynthesizer } from '../components/AudioSynthesizer';
 
 interface LibraryProps {
@@ -75,8 +75,8 @@ export const LibraryPage: React.FC<LibraryProps> = ({ onPlayGame }) => {
                 </div>
               </div>
 
-              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                Cloud Synced
+              <span className="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3 text-emerald-400" /> Cloud Synced
               </span>
             </div>
 
