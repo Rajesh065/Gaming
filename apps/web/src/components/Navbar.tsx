@@ -50,13 +50,8 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Brand Logo */}
         <div
           onClick={() => handleTabClick('discover')}
-          className="flex items-center gap-3 cursor-pointer group select-none"
+          className="flex items-center cursor-pointer group select-none"
         >
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 via-indigo-600 to-cyan-500 p-0.5 shadow-lg shadow-indigo-500/20 group-hover:scale-105 transition-transform duration-200">
-            <div className="w-full h-full bg-[#0E121B] rounded-[10px] flex items-center justify-center">
-              <Gamepad2 className="w-5 h-5 text-indigo-400 group-hover:text-cyan-300 transition-colors" />
-            </div>
-          </div>
           <div>
             <div className="flex items-center gap-2">
               <span className="font-extrabold tracking-tight text-lg text-white font-sans">
